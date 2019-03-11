@@ -83,7 +83,7 @@ const TwitchVideos = () => {
       {clipData.length === 0 ? null : (
         <div>
           <div>
-            <p>Currently Watching Top {state.currentGame} Clips:</p>
+            <p data-testid="currentGame">Currently Watching Top {state.currentGame} Clips:</p>
             <iframe
               id="video"
               title={clipData.length === 0 ? 'None' : clipData[0].title}
@@ -103,7 +103,7 @@ const TwitchVideos = () => {
             </div>
             <div>
               <div>
-                <span>
+                <span data-testid="clipDataTitle">
                   {'Title:'} {clipData.length === 0 ? null : clipData[0].title}
                 </span>
                 <br />
@@ -119,7 +119,7 @@ const TwitchVideos = () => {
                   {'Views:'} {clipData.length === 0 ? null : formatNumber(clipData[0].views)}
                 </span>
               </div>
-              <NewClipButton onClick={() => newClip()}>
+              <NewClipButton onClick={() => newClip()} data-testid="newClipButton">
                 Watch Another {state.currentGame} Clip
               </NewClipButton>
             </div>

@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import regeneratorRuntime, { async } from 'regenerator-runtime';
 import styled from 'styled-components';
 import { currentGame, currentGameId, currentBoxArt } from '../actions/index';
@@ -8,7 +7,7 @@ import ClientId from '../clientId';
 import { Store } from '../store/index';
 
 const WrapperDiv = styled.div`
-  margin-left: 2em;
+  margin-left: 0.1em;
 `;
 
 const HeaderDiv = styled.div`
@@ -105,7 +104,7 @@ const TwitchGames = () => {
   };
   return (
     <WrapperDiv>
-      <HeaderDiv onClick={() => dropDownToggle()}>
+      <HeaderDiv onClick={() => dropDownToggle()} data-testid="dropDownWrapper">
         <h3>
           Choose a Game
           <Arrow>{' '}{gameArrCpy === null ? '▼' : '▲'}</Arrow>
@@ -118,12 +117,13 @@ const TwitchGames = () => {
               type="text"
               placeholder="Search the Top 100 Games"
               onChange={input => filterGames(input)}
+              data-testid="inputBox"
             />
           </StyledInputDiv>
-          <StyledOl>
+          <StyledOl data-testid="gameList">
             {gameArrCpy.map(item => (
               <StyledLi onClick={() => newGame(item)} key={item.game}>
-                {item.index}{'.'} {item.game}
+                {item.index}{'. '}{item.game}
               </StyledLi>
             ))}
           </StyledOl>

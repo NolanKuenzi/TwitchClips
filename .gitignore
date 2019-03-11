@@ -24,4 +24,3 @@ coverage
 # misc
 .DS_Store
 src/clientId.js
-src/__mocks__/
