@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { reducer, initialState } from './index';
 
 describe('reducer function', () => {

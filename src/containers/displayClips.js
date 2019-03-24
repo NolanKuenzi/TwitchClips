@@ -5,6 +5,8 @@ import regeneratorRuntime, { async } from 'regenerator-runtime';
 import styled from 'styled-components';
 import ClientId from '../clientId';
 import { Store } from '../store/index';
+import { currentGameId, savedClipsArr, currentSavedClip } from '../actions/index';
+import { STATUS_CODES } from 'http';
 
 const ClipsDiv = styled.div`
   text-align: center;
@@ -22,9 +24,7 @@ const BottomDiv = styled.div`
 `;
 
 const NewClipButton = styled.button`
-  margin-top: 0.2em;
-  margin-left: 2em;
-  margin-right: 2em;
+  margin-bottom: 0.5em;
   background-color: rgb(100, 65, 165);
   border: 0.2em solid black;
   outline: none;
@@ -40,8 +40,29 @@ const NewClipButton = styled.button`
   }
 `;
 
+const SaveClipButton = styled.button`
+  margin-top: 0.5em;
+  background-color: rgb(100, 65, 165);
+  border: 0.2em solid black;
+  outline: none;
+  height: 2em;
+  width: 6em;
+  cursor: pointer;
+  font-size: 1em;
+  text-align: center;
+  :active {
+    color: white;
+    box-shadow: none;
+    transform: translateY(0.3em);
+    outline: none;
+`;
+
+const ImgDiv = styled.div`
+  margin-right: 1em;
+  margin-left: 1em;
+`;
 const TwitchVideos = () => {
-  const { state } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const [clipData, setClipData] = useState([]);
   async function Api() {
     try {
@@ -61,14 +82,43 @@ const TwitchVideos = () => {
       alert('Embedded Twitch Video Failed to load, please try again');
     }
   }
+  const saveClip = () => {
+    let savedClipsData;
+    if (state.savedClipsArr === null || state.savedClipsArr === undefined) {
+      savedClipsData = [];
+    } else {
+      savedClipsData = state.savedClipsArr.slice(0);
+    }
+    if (savedClipsData.length + 1 === 11) {
+      alert('Maximum number of saved clips exceeded');
+      return;
+    }
+    for (let i = 0; i < savedClipsData.length; i++) {
+      if (savedClipsData[i].url === clipData[0].url) {
+        alert('This clip is already saved');
+        return;
+      }
+    }
+    savedClipsData.push({
+      url: clipData[0].url, title: clipData[0].title, creator: clipData[0].creator, broadcaster: clipData[0].broadcaster,
+      views: clipData[0].views, id: clipData[0].id, game: state.currentGame, boxArt: state.currentBoxArt
+    });
+    dispatch(savedClipsArr(savedClipsData.slice(0)));
+    window.localStorage.setItem('savedClipsArr', JSON.stringify(savedClipsData.slice(0)));
+  };
   useEffect(() => {
+    if (state.currentSavedClip.length !== 0 && state.currentSavedClip[0].url !== clipData[0].url) {
+      setClipData(state.currentSavedClip);
+      return;
+    }
     if (clipData.length === 0 || clipData[0].id !== state.currentGameId) {
       Api();
     }
-  }, [Api, clipData, state.currentGameId]);
+  }, [Api, clipData, state.currentSavedClip]);
   const newClip = () => {
-    if (clipData.length === 0) {
-      return;
+    if (state.currentSavedClip.length === 1) {
+      dispatch(currentSavedClip([]));
+      setClipData([]);
     }
     setClipData(clipData.slice(1));
   };
@@ -82,8 +132,10 @@ const TwitchVideos = () => {
       </div>
       {clipData.length === 0 ? null : (
         <div>
+          <NewClipButton onClick={() => newClip()} data-testid="newClipButton">
+            Watch Another {state.currentGame} Clip
+          </NewClipButton>
           <div>
-            <p data-testid="currentGame">Currently Watching Top {state.currentGame} Clips:</p>
             <iframe
               id="video"
               title={clipData.length === 0 ? 'None' : clipData[0].title}
@@ -98,39 +150,40 @@ const TwitchVideos = () => {
             />
           </div>
           <BottomDiv>
-            <div>
+            <ImgDiv>
               <img src={state.currentBoxArt} alt="" />
-            </div>
+            </ImgDiv>
             <div>
               <div>
                 <span data-testid="clipDataTitle">
-                  {'Title:'} {clipData.length === 0 ? null : clipData[0].title}
+                  {'Title:'} {clipData[0].title.length > 80 ? clipData[0].title.slice(0, 80).concat('...') : clipData[0].title}
                 </span>
                 <br />
                 <span>
-                  {'Created by:'} {clipData.length === 0 ? null : clipData[0].creator}
+                  {'Created by:'} {clipData[0].creator}
                 </span>{' '}
                 <br />
                 <span>
-                  {'Featuring:'} {clipData.length === 0 ? null : clipData[0].broadcaster}{' '}
+                  {'Featuring:'} {clipData[0].broadcaster}{' '}
                 </span>
                 <br />
                 <span>
-                  {'Views:'} {clipData.length === 0 ? null : formatNumber(clipData[0].views)}
+                  {'Views:'} {formatNumber(clipData[0].views)}
                 </span>
               </div>
-              <NewClipButton onClick={() => newClip()} data-testid="newClipButton">
-                Watch Another {state.currentGame} Clip
-              </NewClipButton>
+              <SaveClipButton onClick={() => saveClip()} data-testid="newClipButton">
+                Save Clip
+              </SaveClipButton>
             </div>
-            <div>
+            <ImgDiv>
               <img src={state.currentBoxArt} alt="" />
-            </div>
+            </ImgDiv>
           </BottomDiv>
         </div>
       )}
     </ClipsDiv>
   );
 };
+
 
 export default TwitchVideos;

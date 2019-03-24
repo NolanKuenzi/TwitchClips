@@ -13,4 +13,14 @@ const currentBoxArt = item => ({
   item,
 });
 
-export { currentGameId, currentGame, currentBoxArt };
+const savedClipsArr = item => ({
+  type: 'SAVED_CLIPS_ARR',
+  item,
+});
+
+const currentSavedClip = item => ({
+  type: 'CURRENT_SAVED_CLIP',
+  item,
+});
+
+export { currentGameId, currentGame, currentBoxArt, savedClipsArr, currentSavedClip };

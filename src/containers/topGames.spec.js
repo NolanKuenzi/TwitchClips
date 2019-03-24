@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { render, cleanup, wait, fireEvent } from 'react-testing-library';
 import regeneratorRuntime, { async } from 'regenerator-runtime'; /* eslint-disable-line */

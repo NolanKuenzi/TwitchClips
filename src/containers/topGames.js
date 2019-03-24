@@ -1,20 +1,21 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import regeneratorRuntime, { async } from 'regenerator-runtime';
 import styled from 'styled-components';
-import { currentGame, currentGameId, currentBoxArt } from '../actions/index';
+import { currentGame, currentGameId, currentBoxArt, currentSavedClip } from '../actions/index';
 import ClientId from '../clientId';
 import { Store } from '../store/index';
 
 const WrapperDiv = styled.div`
-  margin-left: 0.1em;
+  margin-left: 1.5em;
 `;
 
 const HeaderDiv = styled.div`
   border: 0.2em solid;
   text-align: center;
   cursor: pointer;
-  margin-top: 7em;
+  margin-top: 11em;
   height: 3em;
   width: 15em;
 `;
@@ -87,6 +88,7 @@ const TwitchGames = () => {
     dispatch(currentGameId(newGameArr[0].id));
     dispatch(currentGame(newGameArr[0].game));
     dispatch(currentBoxArt(newGameArr[0].boxArt.replace('{width}x{height}', '125x125')));
+    dispatch(currentSavedClip([]));
   };
   const dropDownToggle = () => {
     if (gameArrCpy === null) {

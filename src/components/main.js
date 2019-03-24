@@ -1,7 +1,10 @@
+/* eslint-disable */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import TwitchGames from '../containers/topGames';
 import TwitchVideo from '../containers/displayClips';
+import SavedClips from '../containers/saveClips';
+
 import { Provider } from '../store/index';
 
 const Body = createGlobalStyle`
@@ -25,6 +28,7 @@ const Main = () => {
         <ContentDiv>
           <TwitchGames />
           <TwitchVideo />
+          <SavedClips />
         </ContentDiv>
       </Provider>
     </div>
