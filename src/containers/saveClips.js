@@ -16,7 +16,7 @@ const HeaderDiv = styled.div`
   cursor: pointer;
   height: 3em;
   width: 15em;
-  margin-top: 11em;
+  margin-top: 8em;
 `;
 
 const ListDiv = styled.div`
@@ -34,6 +34,26 @@ const SavedClipsLi = styled.li`
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   margin-left: -1em;
+`;
+
+const SaveClipButtons = styled.button`
+  background-color: rgb(100, 65, 165);
+  border: 0.2em solid black;
+  outline: none;
+  height: 2em;
+  cursor: pointer;
+  font-size: 0.9em;
+  text-align: center;
+  margin-top: 0.3em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  font-size: 0.7em;
+  :active {
+    color: white;
+    box-shadow: none;
+    transform: translateY(0.3em);
+    outline: none;
+  }
 `;
 
 const SavedClips = () => {
@@ -60,30 +80,32 @@ const SavedClips = () => {
   };
   return (
     <div>
-      <HeaderDiv data-testid="dropDownWrapper" onClick={() => handleToggle()}>
+      <HeaderDiv data-testid="savedClipsWrapper" onClick={() => handleToggle()}>
         <h3>
           Saved Clips
           <Arrow> {menu === false ? '▼' : '▲'}</Arrow>
         </h3>
       </HeaderDiv>
-      {state.savedClipsArr === null || state.savedClipsArr.length === 0 || menu === false ? null : (
-        <ListDiv>
-          <ol>
-            {state.savedClipsArr.map((item, index) => (
-              <SavedClipsLi key={index}>
-                <div>
-                  {item.title}
-                  <br />
-                  {item.broadcaster} {'playing'} {item.game}
-                  <br />
-                  <button onClick={() => playButton(item)}>Play</button>
-                  <button onClick={() => deleteButton(item.url)}>Delete</button>
-                </div>
-              </SavedClipsLi>
-            ))}
-          </ol>
-        </ListDiv>
-      )}
+      <div data-testid="saveListWrapper">
+        {state.savedClipsArr === null || state.savedClipsArr.length === 0 || menu === false ? null : (
+          <ListDiv>
+            <ol data-testid="savedClipsList">
+              {state.savedClipsArr.map((item, index) => (
+                <SavedClipsLi key={index}>
+                  <div>
+                    {item.title} {'-'}
+                    <br />
+                    {item.broadcaster} {'playing'} {item.game}
+                    <br />
+                    <SaveClipButtons onClick={() => playButton(item)} data-testid={`playButton${index}`}>Play</SaveClipButtons>
+                    <SaveClipButtons onClick={() => deleteButton(item.url)} data-testid={`deleteButton${index}`}>Delete</SaveClipButtons>
+                  </div>
+                </SavedClipsLi>
+              ))}
+            </ol>
+          </ListDiv>
+        )}
+      </div>
     </div>
   );
 };

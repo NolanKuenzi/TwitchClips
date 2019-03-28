@@ -24,21 +24,25 @@ describe('<TwitchVideos /> component', () => {
   it('Displays data from initial state & from axios mock', async () => {
     const { getByTestId } = RenderComponent();
     await wait(() => {
-      const currentGame = getByTestId('currentGame');
-      const clipDataTitle = getByTestId('clipDataTitle');
       const newClipButton = getByTestId('newClipButton');
-      expect(currentGame.textContent).toContain('Fortnite');
-      expect(clipDataTitle.textContent).toContain('Clip 1');
+      const clipDataTitle = getByTestId('clipDataTitle');
+      const clipDataViews = getByTestId('clipDataViews');
       expect(newClipButton.textContent).toContain('Fortnite');
+      expect(clipDataTitle.textContent).toContain('Clip 1');
+      expect(clipDataViews.textContent).toBe("Views: 37,058");
     });
   });
   it('Changes clips when <NewClipButton /> is clicked', async () => {
     const { getByTestId } = RenderComponent();
     await wait(() => {
       const newClipButton = getByTestId('newClipButton');
-      fireEvent.click(newClipButton);
       const clipDataTitle = getByTestId('clipDataTitle');
+      expect(clipDataTitle.textContent).toContain('Clip 1');
+      const clipDataViews = getByTestId('clipDataViews');
+      expect(clipDataViews.textContent).toBe("Views: 37,058");
+      fireEvent.click(newClipButton);
       expect(clipDataTitle.textContent).toContain('Clip 2');
+      expect(clipDataViews.textContent).toBe("Views: 34,662");
     });
   });
 });

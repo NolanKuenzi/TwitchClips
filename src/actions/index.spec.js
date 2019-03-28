@@ -1,4 +1,10 @@
-import { currentGameId, currentGame, currentBoxArt } from './index';
+import {
+  currentGameId,
+  currentGame,
+  currentBoxArt,
+  savedClipsArr,
+  currentSavedClip,
+} from './index';
 
 describe('Action objects returned from action-creator functions', () => {
   test('currentGameId updates the current game id', () => {
@@ -24,5 +30,23 @@ describe('Action objects returned from action-creator functions', () => {
       item,
     });
     expect(currentBoxArt(newBoxArt)).toEqual(expectedAction(newBoxArt));
+  });
+  test('savedClipsArr sets the saved clips array', () => {
+    const newSavedClipArr = ['https://clip.twitch.tv/_clip_33983'];
+    const expectedAction = item => ({
+      type: 'SAVED_CLIPS_ARR',
+      item,
+    });
+    expect(savedClipsArr(newSavedClipArr.slice(0))).toEqual(
+      expectedAction(newSavedClipArr.slice(0)),
+    );
+  });
+  test('currentSavedClip updates the current saved clip (that is being played)', () => {
+    const currentClip = ['https://clip.twitch.tv/_clip_34683'];
+    const expectedAction = item => ({
+      type: 'CURRENT_SAVED_CLIP',
+      item,
+    });
+    expect(currentSavedClip(currentClip)).toEqual(expectedAction(currentClip));
   });
 });

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import ClientId from '../clientId';
 import { Store } from '../store/index';
 import { currentGameId, savedClipsArr, currentSavedClip } from '../actions/index';
-import { STATUS_CODES } from 'http';
 
 const ClipsDiv = styled.div`
   text-align: center;
@@ -48,7 +47,7 @@ const SaveClipButton = styled.button`
   height: 2em;
   width: 6em;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 0.9em;
   text-align: center;
   :active {
     color: white;
@@ -167,11 +166,11 @@ const TwitchVideos = () => {
                   {'Featuring:'} {clipData[0].broadcaster}{' '}
                 </span>
                 <br />
-                <span>
+                <span data-testid="clipDataViews">
                   {'Views:'} {formatNumber(clipData[0].views)}
                 </span>
               </div>
-              <SaveClipButton onClick={() => saveClip()} data-testid="newClipButton">
+              <SaveClipButton onClick={() => saveClip()} data-testid="saveClipButton">
                 Save Clip
               </SaveClipButton>
             </div>

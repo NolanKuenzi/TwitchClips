@@ -15,7 +15,7 @@ const HeaderDiv = styled.div`
   border: 0.2em solid;
   text-align: center;
   cursor: pointer;
-  margin-top: 11em;
+  margin-top: 8em;
   height: 3em;
   width: 15em;
 `;

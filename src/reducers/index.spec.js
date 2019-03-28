@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { reducer, initialState } from './index';
 
 describe('reducer function', () => {
@@ -12,6 +11,8 @@ describe('reducer function', () => {
       currentGameId: newGameId,
       currentGame: 'Fortnite',
       currentBoxArt: 'https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-125x125.jpg',
+      savedClipsArr: JSON.parse(window.localStorage.getItem('savedClipsArr')),
+      currentSavedClip: [],
     });
   });
   it('should handle CURRENT_GAME action', () => {
@@ -21,6 +22,8 @@ describe('reducer function', () => {
       currentGameId: '33214',
       currentGame: newGame,
       currentBoxArt: 'https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-125x125.jpg',
+      savedClipsArr: JSON.parse(window.localStorage.getItem('savedClipsArr')),
+      currentSavedClip: [],
     });
   });
   it('should handle CURRENT_BOXART action', () => {
@@ -30,6 +33,30 @@ describe('reducer function', () => {
       currentGameId: '33214',
       currentGame: 'Fortnite',
       currentBoxArt: newBoxArt,
+      savedClipsArr: JSON.parse(window.localStorage.getItem('savedClipsArr')),
+      currentSavedClip: [],
+    });
+  });
+  it('should handle SAVED_CLIPS_ARR action', () => {
+    const newArr = ['https://clips.twitch.tv/_clip_34683', 'https://clips.twitch.tv/_clip_84453'];
+    const action = { type: 'SAVED_CLIPS_ARR', item: newArr.slice(0) };
+    expect(reducer(initialState, action)).toEqual({
+      currentGameId: '33214',
+      currentGame: 'Fortnite',
+      currentBoxArt: 'https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-125x125.jpg',
+      savedClipsArr: newArr.slice(0),
+      currentSavedClip: [],
+    });
+  });
+  it('should handle CURRENT_SAVED_CLIP action', () => {
+    const currentSvdClip = ['https://clip.twitch.tv/_clip_456503'];
+    const action = { type: 'CURRENT_SAVED_CLIP', item: currentSvdClip.slice(0) };
+    expect(reducer(initialState, action)).toEqual({
+      currentGameId: '33214',
+      currentGame: 'Fortnite',
+      currentBoxArt: 'https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-125x125.jpg',
+      savedClipsArr: JSON.parse(window.localStorage.getItem('savedClipsArr')),
+      currentSavedClip: currentSvdClip.slice(0),
     });
   });
 });
