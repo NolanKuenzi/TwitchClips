@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import ClientId from '../clientId';
 import { Store } from '../store/index';
 import { currentGameId, savedClipsArr, currentSavedClip } from '../actions/index';
+import BroadCasterInfo from './broadcasterInfo';
 
 const ClipsDiv = styled.div`
   text-align: center;
@@ -20,6 +21,12 @@ const BottomDiv = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
+`;
+
+const BottomDivContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  max-width: 43.5em;
 `;
 
 const NewClipButton = styled.button`
@@ -44,8 +51,8 @@ const SaveClipButton = styled.button`
   background-color: rgb(100, 65, 165);
   border: 0.2em solid black;
   outline: none;
-  height: 2em;
-  width: 6em;
+  height: 3em;
+  width: 8em;
   cursor: pointer;
   font-size: 0.9em;
   text-align: center;
@@ -75,6 +82,7 @@ const TwitchVideos = () => {
           broadcaster: item.broadcaster_name,
           views: item.view_count,
           id: item.game_id,
+          userId: item.broadcaster_id,
         })),
       );
     } catch (error) {
@@ -100,7 +108,7 @@ const TwitchVideos = () => {
     }
     savedClipsData.push({
       url: clipData[0].url, title: clipData[0].title, creator: clipData[0].creator, broadcaster: clipData[0].broadcaster,
-      views: clipData[0].views, id: clipData[0].id, game: state.currentGame, boxArt: state.currentBoxArt
+      views: clipData[0].views, id: clipData[0].id, userId: clipData[0].userId, game: state.currentGame, boxArt: state.currentBoxArt,
     });
     dispatch(savedClipsArr(savedClipsData.slice(0)));
     window.localStorage.setItem('savedClipsArr', JSON.stringify(savedClipsData.slice(0)));
@@ -137,52 +145,54 @@ const TwitchVideos = () => {
           <div>
             <iframe
               id="video"
-              title={clipData.length === 0 ? 'None' : clipData[0].title}
+              title={clipData[0].title}
               autoPlay={false}
-              src={clipData.length === 0 ? null : clipData[0].url}
+              src={clipData[0].url}
               height="500"
               width="700"
               frameBorder="<frameborder>"
               scrolling="<scrolling>"
               allowFullScreen="<allowfullscreen>"
-              muted={false}
+              muted={true}
             />
           </div>
           <BottomDiv>
-            <ImgDiv>
-              <img src={state.currentBoxArt} alt="" />
-            </ImgDiv>
-            <div>
+            <BottomDivContainer>
+              <ImgDiv>
+                <img src={state.currentBoxArt} alt="" />
+              </ImgDiv>
               <div>
-                <span data-testid="clipDataTitle">
-                  {'Title:'} {clipData[0].title.length > 80 ? clipData[0].title.slice(0, 80).concat('...') : clipData[0].title}
-                </span>
-                <br />
-                <span>
-                  {'Created by:'} {clipData[0].creator}
-                </span>{' '}
-                <br />
-                <span>
-                  {'Featuring:'} {clipData[0].broadcaster}{' '}
-                </span>
-                <br />
-                <span data-testid="clipDataViews">
-                  {'Views:'} {formatNumber(clipData[0].views)}
-                </span>
-              </div>
-              <SaveClipButton onClick={() => saveClip()} data-testid="saveClipButton">
-                Save Clip
+                <div>
+                  <span data-testid="clipDataTitle">
+                    {'Title:'} {clipData[0].title}
+                  </span>
+                  <br />
+                  <span>
+                    {'Created by:'} {clipData[0].creator}
+                  </span>{' '}
+                  <br />
+                  <span>
+                    {'Featuring:'} {clipData[0].broadcaster}
+                  </span>
+                  <br />
+                  <span data-testid="clipDataViews">
+                    {'Views:'} {formatNumber(clipData[0].views)}
+                  </span>
+                </div>
+                <SaveClipButton onClick={() => saveClip()} data-testid="saveClipButton">
+                  Save Clip
               </SaveClipButton>
-            </div>
-            <ImgDiv>
-              <img src={state.currentBoxArt} alt="" />
-            </ImgDiv>
+              </div>
+              <ImgDiv>
+                <img src={state.currentBoxArt} alt="" />
+              </ImgDiv><br />
+            </BottomDivContainer>
           </BottomDiv>
+          <BroadCasterInfo user={clipData[0].broadcaster} usrId={clipData[0].userId} url={clipData[0].url} />
         </div>
       )}
     </ClipsDiv>
   );
 };
-
 
 export default TwitchVideos;

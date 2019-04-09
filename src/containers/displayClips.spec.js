@@ -20,7 +20,7 @@ function RenderComponent() {
 describe('<TwitchVideos /> component', () => {
   console.error = jest.fn(); /* eslint-disable-line */
   /* Using this until there is a simpler work-around for testing async/await
-   without triggering the new `act` warning */
+  without triggering the new `act` warning */
   it('Displays data from initial state & from axios mock', async () => {
     const { getByTestId } = RenderComponent();
     await wait(() => {
@@ -32,7 +32,7 @@ describe('<TwitchVideos /> component', () => {
       expect(clipDataViews.textContent).toBe("Views: 37,058");
     });
   });
-  it('Changes clips when <NewClipButton /> is clicked', async () => {
+  it('Changes clips when NewClipButton is clicked', async () => {
     const { getByTestId } = RenderComponent();
     await wait(() => {
       const newClipButton = getByTestId('newClipButton');

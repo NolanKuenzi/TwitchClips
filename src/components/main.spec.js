@@ -7,7 +7,6 @@ import Main from './main';
 import { Provider } from '../store/index';
 
 jest.mock('axios');
-
 afterEach(cleanup);
 
 function RenderComponent() {
@@ -39,7 +38,7 @@ describe('<Main /> component', () => {
     });
   });
   it('Clicking the save clip button in the <TwitchVideo /> component saves the clip in the <SavedClips /> component', async () => {
-    const { getByTestId, getByText } = RenderComponent();
+    const { getByTestId } = RenderComponent();
     await wait(() => {
       const saveClipButton = getByTestId('saveClipButton');
       fireEvent.click(saveClipButton);
