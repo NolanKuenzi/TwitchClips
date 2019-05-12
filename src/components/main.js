@@ -17,7 +17,7 @@ const ContentDiv = styled.div`
   flex-direction: row;
   flex-basis: 100%;
   flex: 1;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
 `;
 
 const Main = () => {
